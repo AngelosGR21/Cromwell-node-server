@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/AngelosGR21/Cromwell-node-server/issues"
   },
-  "homepage": "https://github.com/AngelosGR21/Cromwell-node-server#readme"
+  "homepage": "https://github.com/AngelosGR21/Cromwell-node-server#readme",
+  "dependencies": {
+    "pg": "^8.8.0"
+  }
 }
