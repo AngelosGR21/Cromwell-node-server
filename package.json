@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/AngelosGR21/Cromwell-node-server#readme",
   "dependencies": {
+    "dotenv": "^16.0.2",
     "pg": "^8.8.0"
   }
 }
