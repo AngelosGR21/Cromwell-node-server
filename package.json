@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "setup-db": "psql -f ./db/setup.sql",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "seed-db": "node ./db/seed.js",
+    "start": "NODE_ENV=local node app.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,8 @@
   "dependencies": {
     "dotenv": "^16.0.2",
     "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "pg-format": "^1.0.4"
   }
 }
