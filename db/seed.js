@@ -26,11 +26,7 @@ const seed = async () => {
         `INSERT INTO users (first_name, last_name, email, password) VALUES %L RETURNING *;`, formattedUserData
     )
     
-    return db.query(insertUsersData).then((result) => {
-        console.log(result)
-        console.log(result.rows)
-        db.end()
-    });
+    return db.query(insertUsersData)
 }
 
-seed()
+module.exports = seed;
