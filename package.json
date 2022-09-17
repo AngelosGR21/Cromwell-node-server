@@ -6,8 +6,8 @@
   "scripts": {
     "setup-db": "psql -f ./db/setup.sql",
     "seed-db": "node ./db/run-seed.js",
-    "start": "NODE_ENV=local node listen.js",
-    "test": "jest"
+    "start": "NODE_ENV=development node listen.js",
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/AngelosGR21/Cromwell-node-server#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^16.0.2",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.8.0"
   },
   "devDependencies": {
