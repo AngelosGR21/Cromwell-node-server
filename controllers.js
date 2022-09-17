@@ -1,8 +1,9 @@
 const parseData = require("./utils/parseData")
 const bcrypt = require("bcrypt")
 const endRequest = require("./utils/endRequest")
+const jwt = require("jsonwebtoken")
 
-const { insertUser } = require("./models");
+const { insertUser, verifyUser } = require("./models");
 
 module.exports.postUser = async (req, res) => {
     try{
@@ -21,8 +22,27 @@ module.exports.postUser = async (req, res) => {
 
         return endRequest(res, 200, "User has been created")
     }catch(e){
-        console.log(e)
         if(e.code === "23505") return endRequest(res, 409, "Email is already in use") 
+        return endRequest(res, 500, "Internal server error")
+    }
+}
+
+module.exports.loginUser = async (req, res) => {
+    try{
+        const {email, password} = await parseData(req);
+        
+        if(!email || !password) return endRequest(res, 400, "Bad request")
+
+        const userDetails = await verifyUser({email, password})
+
+        return jwt.sign(userDetails, process.env.JWT_KEY, {expiresIn: "5h"}, (err, encoded) => {
+            if(err) return endRequest(res, 500, "Internal server error")
+
+            return endRequest(res, 200, "Login successful", encoded)
+        })
+
+    }catch(e){
+        if(e.customError) return endRequest(res, e.statusCode, e.message)
         return endRequest(res, 500, "Internal server error")
     }
 }

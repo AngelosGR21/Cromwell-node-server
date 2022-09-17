@@ -8,7 +8,7 @@ beforeEach(() => seed())
 
 afterAll(() => db.end())
 
-describe("GET - '/'", () => {
+describe("GET - /", () => {
     test("checking if api is working", () => {
         return request(server)
         .get("/")
@@ -21,7 +21,7 @@ describe("GET - '/'", () => {
 })
 
 describe("POST - /user/register", () => {
-    test("returns 200", () => {
+    test("returns 200 when validation is passed", () => {
         const user = {
             firstName: "Daniel",
             lastName: "Williams",
@@ -100,6 +100,49 @@ describe("POST - /user/register", () => {
             .then((res) => {
                 const {data} = res.body;
                 expect(data).toBe("Email is already in use");
+            })
+    })
+})
+
+describe("POST - /user/login", () => {
+    test("returns 200 when credentials are correct and sends a JWT token as a header", () => {
+        const credentials = {
+            email: "paul@gmail.com",
+            password: "PaulStatham55!"
+        }
+        return request(server)
+            .post("/user/login")
+            .send(credentials)
+            .expect(200)
+            .then((res) => {
+                const {data} = res.body;
+                expect(res.headers.authorization.split(" ")[1]).not.toBeUndefined();
+                expect(data).toBe("Login successful")
+            })
+    })
+    test("returns 400 when fields are missing", () => {
+        const credentials = {email: "paul@gmail.com"}
+            return request(server)
+            .post("/user/login")
+            .send(credentials)
+            .expect(400)
+            .then((res) => {
+                const {data} = res.body;
+                expect(data).toBe("Bad request")
+            })
+    })
+    test("returns 401 when credentials do not match", () => {
+        const credentials = {
+            email: "paul@gmail.com",
+            password: "PaulStatham55##"
+        }
+        return request(server)
+            .post("/user/login")
+            .send(credentials)
+            .expect(401)
+            .then((res) => {
+                const {data} = res.body;
+                expect(data).toBe("Invalid email or password")
             })
     })
 })
