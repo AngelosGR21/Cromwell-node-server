@@ -146,3 +146,51 @@ describe("POST - /user/login", () => {
             })
     })
 })
+
+describe("GET - /user", () => {
+    test("returns 200 when a token passes validation and sends the user details", async () => {
+        const credentials = {
+            email: "paul@gmail.com",
+            password: "PaulStatham55!"
+        }
+        return request(server)
+                .post("/user/login")
+                .send(credentials)
+                .expect(200)
+                .then((res) => {
+                    const token = res.headers.authorization.split(" ")[1]
+                    return request(server)
+                        .get("/user")
+                        .auth(token, {type: "bearer"})
+                        .then((res) => {
+                            const {data} = res.body;
+                            expect(data).toMatchObject({
+                                email: "paul@gmail.com",
+                                firstName: "Paul",
+                                lastName: "Statham",
+                                iat: expect.any(Number),
+                                exp: expect.any(Number)
+                            })
+                        })
+                })
+    })
+    test("returns 401 when a request has been sent without a token", async () => {
+        return request(server)
+                        .get("/user")
+                        .expect(401)
+                        .then((res) => {
+                            const {data} = res.body;
+                            expect(data).toBe("Unauthorized request")
+                        })
+    })
+    test("returns 401 when a token is invalid", async () => {
+        return request(server)
+                        .get("/user")
+                        .auth("Some invalid token", {type: "bearer"})
+                        .expect(401)
+                        .then((res) => {
+                            const {data} = res.body;
+                            expect(data).toBe("Invalid or expired token")
+                        })
+    })
+})

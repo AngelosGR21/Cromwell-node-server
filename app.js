@@ -1,7 +1,7 @@
 const http = require("http")
 const server = http.createServer()
 
-const {postUser, loginUser} = require("./controllers")
+const {postUser, loginUser, getUser} = require("./controllers")
 const endRequest = require("./utils/endRequest")
 
 server.on("request", async (req, res) => {
@@ -11,6 +11,8 @@ server.on("request", async (req, res) => {
         postUser(req, res)
     }else if(req.url === "/user/login" && req.method === "POST"){
         loginUser(req, res)
+    }else if(req.url === "/user" && req.method === "GET"){
+        getUser(req, res)
     }
 })
 
