@@ -19,7 +19,11 @@ module.exports.verifyUser = ( reqBody ) => {
         return bcrypt.compare(password, user.password).then((correct) => {
             if(!correct) return Promise.reject({statusCode: 401, message: "Invalid email or password", customError: true})
             delete user.password;
-
+            user.firstName = user.first_name;
+            user.lastName = user.last_name;
+            delete user.first_name
+            delete user.last_name
+            
             return user;
         })
     })
