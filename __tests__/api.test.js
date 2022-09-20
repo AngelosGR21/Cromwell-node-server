@@ -21,7 +21,7 @@ describe("GET - /", () => {
 })
 
 describe("POST - /user/register", () => {
-    test("returns 200 when validation is passed", () => {
+    test("returns 200 when validation is passed and sends a JWT token as a header", () => {
         const user = {
             firstName: "Daniel",
             lastName: "Williams",
@@ -35,6 +35,7 @@ describe("POST - /user/register", () => {
             .expect(200)
             .then((res) => {
                 const {data} = res.body;
+                expect(res.headers.authorization.split(" ")[1]).not.toBeUndefined();
                 expect(data).toBe("User has been created");
             })
     })

@@ -18,9 +18,13 @@ module.exports.postUser = async (req, res) => {
         
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        await insertUser({email, firstName, lastName, hashedPassword});
+        const userData = await insertUser({email, firstName, lastName, hashedPassword})
+           
+        return jwt.sign(userData, process.env.JWT_KEY, {expiresIn: "5h"}, (err, encoded) => {
+            if(err) return endRequest(res, 500, "Internal server error")
 
-        return endRequest(res, 200, "User has been created")
+            return endRequest(res, 200, "User has been created", encoded)
+        })
     }catch(e){
         if(e.code === "23505") return endRequest(res, 409, "Email is already in use") 
         return endRequest(res, 500, "Internal server error")
