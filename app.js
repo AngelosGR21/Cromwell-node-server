@@ -5,6 +5,15 @@ const {postUser, loginUser, getUser} = require("./controllers")
 const endRequest = require("./utils/endRequest")
 
 server.on("request", async (req, res) => {
+    if(req.method === "OPTIONS"){
+        res.setHeader('Access-Control-Allow-Origin', '*');
+	    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+	    res.setHeader('Access-Control-Allow-Headers', 'content-type');
+        res.statusCode = 204
+        res.end();
+        return
+    }
+
     if(req.url === "/" && req.method === "GET"){
         endRequest(res, 200, "Api is up and running")
     }else if(req.url === "/user/register" && req.method === "POST"){
