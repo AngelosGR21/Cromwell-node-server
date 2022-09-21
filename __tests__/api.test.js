@@ -132,6 +132,20 @@ describe("POST - /user/login", () => {
                 expect(data).toBe("Bad request")
             })
     })
+    test("returns 401 when a user was not found", () => {
+        const credentials = {
+            email : "test",
+            password: "test"
+        }
+        return request(server)
+            .post("/user/login")
+            .send(credentials)
+            .expect(401)
+            .then((res) => {
+                const {data} = res.body;
+                expect(data).toBe("Invalid email or password")
+            })
+    })
     test("returns 401 when credentials do not match", () => {
         const credentials = {
             email: "paul@gmail.com",
