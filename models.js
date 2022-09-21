@@ -15,6 +15,8 @@ module.exports.verifyUser = ( reqBody ) => {
 
     return db.query(`SELECT * FROM users 
     WHERE email = $1`, [email]).then( (res) => {
+        if(!res.rows[0]) return Promise.reject({statusCode: 401, message: "Invalid email or password", customError: true})
+        
         const user = res.rows[0];
         return bcrypt.compare(password, user.password).then((correct) => {
             if(!correct) return Promise.reject({statusCode: 401, message: "Invalid email or password", customError: true})
