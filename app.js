@@ -8,7 +8,7 @@ server.on("request", async (req, res) => {
     if(req.method === "OPTIONS"){
         res.setHeader('Access-Control-Allow-Origin', '*');
 	    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
-	    res.setHeader('Access-Control-Allow-Headers', 'content-type');
+	    res.setHeader('Access-Control-Allow-Headers', 'content-type, authorization');
         res.statusCode = 204
         res.end();
         return
